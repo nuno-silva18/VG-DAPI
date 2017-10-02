@@ -1,0 +1,20 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+AMAZON	../amazon_scrap.py	/^AMAZON = AmazonAPI('AKIAJ7Y2EZJUVTOMMVYQ', 'ln7Grxo4fTAY4wkcjE77lp7s5xkPqFyK0ozyHuNN', 'naodameu-20')$/;"	kind:variable	line:7
+amaz_scrap	../amazon_scrap.py	/^def amaz_scrap(vg_name):$/;"	kind:function	line:9
+amazon_scrap.py	../amazon_scrap.py	1;"	kind:file	line:1
+appIDList	../steam_scrap.py	/^	appIDList = r.json()['applist']['apps']$/;"	kind:variable	line:16
+appID_Dota	../steam_scrap.py	/^	appID_Dota = getAppID(appIDList,'Dota 2')$/;"	kind:variable	line:19
+getAppID	../steam_scrap.py	/^def getAppID(appIDListArg,name):$/;"	kind:function	line:3
+main	../wikipedia_list_scraping.py	/^def main():$/;"	kind:function	line:26
+metac_scrap	../metacritic_scrap.py	/^def metac_scrap(meta_url):$/;"	kind:function	line:7
+metacritic_scrap.py	../metacritic_scrap.py	1;"	kind:file	line:1
+r	../steam_scrap.py	/^	r = requests.get('https:\/\/api.steampowered.com\/ISteamApps\/GetAppList\/v2\/')$/;"	kind:variable	line:13
+r_Dota	../steam_scrap.py	/^	r_Dota = requests.get('http:\/\/api.steampowered.com\/ISteamUserStats\/GetGlobalAchievementPercentagesForApp\/v0002\/?gameid=' + str(appID_Dota) + '&format=json')$/;"	kind:variable	line:23
+scrape_ps4_games	../wikipedia_list_scraping.py	/^def scrape_ps4_games():$/;"	kind:function	line:5
+steam_scrap.py	../steam_scrap.py	1;"	kind:file	line:1
+wikipedia_list_scraping.py	../wikipedia_list_scraping.py	1;"	kind:file	line:1
