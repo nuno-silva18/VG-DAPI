@@ -1,13 +1,12 @@
 """This module scrapes game information from wikipedia lists to compile into a database"""
 import pandas as pd
-import sys
 import pymysql
 
 def connectDatabase():
+    """Create database connection"""
     global db
-    db = pymysql.connect(host='localhost',user='root',password='',db='vg_dapi',cursorclass=pymysql.cursors.DictCursor)
-
-                            
+    db = pymysql.connect(host='localhost', user='root', password='',
+                         db='vg_dapi', cursorclass=pymysql.cursors.DictCursor)
 
 def scrape_ps4_games():
     """Scrapes PS4 games info from wikipedia lists"""
@@ -67,12 +66,13 @@ def scrape_ps4_games():
             #GenreIDs = insertGenre(genres[count])
             #insertGameGenres(newGameId,GenreIDs) 
 
-def insertGame(list):
+def insertGame(game_details_list):
+    """Insert a game into the database"""
     try:
         with db.cursor() as cursor:
             # Create a new record
             sql = "INSERT INTO `game` (`name`, `publishers`, `developers`,`dateUS`,`dateJP`,`dateEU`) VALUES (%s, %s, %s, %s, %s, %s)"
-            cursor.execute(sql, list)
+            cursor.execute(sql, game_details_list)
             db.commit()
             return cursor.lastrowid
     except pymysql.err.IntegrityError:
