@@ -1,7 +1,10 @@
 """This module scrapes game information from wikipedia lists to compile into a database"""
 import pandas as pd
+import MySQLdb
 
-
+def connectDatabase():
+    db=MySQLdb.connect()
+    
 def scrape_ps4_games():
     """Scrapes PS4 games info from wikipedia lists"""
 
