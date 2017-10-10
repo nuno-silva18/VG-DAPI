@@ -69,17 +69,18 @@ CREATE TABLE IF NOT EXISTS `platform` (
 
 CREATE TABLE IF NOT EXISTS `game` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` tinytext NOT NULL,
+  `name` varchar(255) NOT NULL,
   `description` text,
   `publishers` tinytext NOT NULL,
   `developers` tinytext NOT NULL,
-  `dateUS` date,
-  `dateJP` date,
-  `dateEU` date,
+  `dateUS` tinytext,
+  `dateJP` tinytext,
+  `dateEU` tinytext,
   `HLTB_Main` smallint,
   `HLTB_Complete` smallint,
   `IMDB_score` float,
   `IMDB_userscore` float,
+  UNIQUE KEY('name'),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
