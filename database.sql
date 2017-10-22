@@ -6,7 +6,7 @@ CREATE DATABASE IF NOT EXISTS `vg_dapi`;
 USE `vg_dapi`;
 
 
-
+/*!40101 SET NAMES utf8mb4 */;
 -- --------------------------------------------------------
 
 --
@@ -84,7 +84,6 @@ CREATE TABLE IF NOT EXISTS `game` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
-
 -- --------------------------------------------------------
 
 --
@@ -149,3 +148,8 @@ ALTER TABLE `gamegenre` ADD CONSTRAINT gamegenre_game_fk FOREIGN KEY (`gameID`) 
 ON DELETE CASCADE ON UPDATE CASCADE;
 
 
+INSERT INTO `platform` (`id`, `name`, `family`) VALUES
+(1, 'Playstation 4', 'Playstation'),
+(2, 'Xbox One', 'Xbox'),
+(3, 'Nintendo Switch', 'Nintendo'),
+(4, 'Steam', 'PC');
