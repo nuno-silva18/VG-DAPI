@@ -17,6 +17,9 @@ def connectDatabase():
 ```
 - learn pymylsq - https://github.com/PyMySQL/PyMySQL
 ## Setup
-
+To setup node server:
+open terminal at the level of the server, same directory where 'server.js' is located and run following commands:
+- npm install
+- npm start
 ## How to run
 
