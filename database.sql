@@ -122,10 +122,10 @@ ON DELETE CASCADE ON UPDATE CASCADE;
 
 CREATE TABLE IF NOT EXISTS `genre` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` tinytext NOT NULL,
+  `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
-
+ALTER TABLE `genre` ADD UNIQUE(`name`);
 
 -- --------------------------------------------------------
 

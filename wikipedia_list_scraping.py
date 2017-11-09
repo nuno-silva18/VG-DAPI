@@ -64,8 +64,9 @@ def scrape_ps4_games():
                     tempList.append(dateEU[count])
             newGameId = insertGame(tempList) #function returns database id of last inserted game
             insertGamePlatform(newGameId,1)
-            #GenreIDs = insertGenre(genres[count])
-            #insertGameGenres(newGameId,GenreIDs)
+            GenreIDs = []
+            GenreIDs = insertGenres(genres[count])
+            insertGameGenres(newGameId,GenreIDs)
            
 def scrape_xboxone_games():
     """Scrapes XOne games info from wikipedia lists"""
@@ -121,13 +122,13 @@ def scrape_xboxone_games():
                     tempList.append(dateEU[count])
             newGameId = insertGame(tempList) #function returns database id of last inserted game
             insertGamePlatform(newGameId,2)
-            #GenreIDs = insertGenre(genres[count])
-            #insertGameGenres(newGameId,GenreIDs)  
+            GenreIDs = []
+            GenreIDs = insertGenres(genres[count])
+            insertGameGenres(newGameId,GenreIDs)  
             
 def scrape_switch_games():
     """Scrapes NSwitch games info from wikipedia lists"""
     url = r'https://en.wikipedia.org/wiki/List_of_Nintendo_Switch_games'
-    
     tables = pd.read_html(url) # Returns list of all tables on page
     switchgames = tables[0]
     titles = switchgames[switchgames.columns[0]].tolist()
@@ -178,9 +179,38 @@ def scrape_switch_games():
                     tempList.append(dateEU[count])
             newGameId = insertGame(tempList) #function returns database id of last inserted game
             insertGamePlatform(newGameId,3)
-            #GenreIDs = insertGenre(genres[count])
-            #insertGameGenres(newGameId,GenreIDs)  
-            
+            GenreIDs = []
+            GenreIDs = insertGenres(genres[count])
+            insertGameGenres(newGameId,GenreIDs)  
+
+def insertGenres(genres):    
+    """Insert genres into the database"""
+    idList = []
+    if(type(genres) is float):
+        return
+    allGenres=genres.split(',')
+    for count in range(0,len(allGenres)):
+        try:
+            with db.cursor() as cursor:
+                # Create a new record
+                sql = "INSERT INTO `genre` (`name`) VALUES (%s)"
+                cursor.execute(sql, allGenres[count])
+                db.commit()
+                idList.append(cursor.lastrowid) 
+        except pymysql.err.IntegrityError:
+            cursor.close()
+            with db.cursor() as cursor:
+                sql = "SELECT `id` FROM `genre` WHERE `name`=%s"
+                cursor.execute(sql, allGenres[count])
+                result = cursor.fetchone()
+                print("Integrity: Tried to insert duplicate row - Already exists at ID " + str(result['id']))
+                idList.append(result['id'])
+        except pymysql.err.InternalError:
+            print("Error: Invalid data")
+            cursor.close()
+    return idList
+
+
 def insertGame(game_details_list):
     """Insert a game into the database"""
     try:
@@ -195,7 +225,6 @@ def insertGame(game_details_list):
         cursor.close()
         with db.cursor() as cursor:
             sql = "SELECT `id` FROM `game` WHERE `name`=%s"
-            print(game_details_list[0])
             cursor.execute(sql,game_details_list[0])
             result = cursor.fetchone()
             print("Integrity: Tried to insert duplicate row - Already exists at ID " + str(result['id']))
@@ -216,6 +245,23 @@ def insertGamePlatform(gameId,platformId):
         print("Integrity: Tried to insert duplicate row")
     except pymysql.err.InternalError:
         print("Error: Invalid data")
+
+def insertGameGenres(gameId,genreIDs):
+    """Insert gamegenre object into database"""
+    if(type(genreIDs) is list):
+        for count in range(0,len(genreIDs)):
+            try:
+                #Do levenshein distance thing before insert to prevent duplicates
+                with db.cursor() as cursor:
+                    # Create a new record
+                    sql = "INSERT INTO `gamegenre` (`genreID`,`gameID`) VALUES (%s, %s)"
+                    cursor.execute(sql, [genreIDs[count],gameId])
+                    db.commit()
+            except pymysql.err.IntegrityError:
+                print("Integrity: Tried to insert duplicate row")
+            except pymysql.err.InternalError:
+                print("Error: Invalid data")
+            cursor.close()
 
 def main():
     """Entry Point"""
