@@ -80,8 +80,9 @@ CREATE TABLE IF NOT EXISTS `game` (
   `HLTB_Complete` smallint,
   `IMDB_score` float,
   `IMDB_userscore` float,
-  UNIQUE KEY('name'),
-  PRIMARY KEY (`id`)
+  FULLTEXT (name, description),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`name`)
 ) ENGINE=InnoDB;
 
 -- --------------------------------------------------------

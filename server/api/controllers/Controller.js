@@ -8,7 +8,7 @@ var connection = mysql.createConnection({
 });
 
 exports.getGameByName = function(req, res) {
-    connection.query("SELECT * FROM game WHERE name LIKE ?",'%'+req.body.name, function (err, results) {
+    connection.query("SELECT * FROM game WHERE match(name, description) AGAINST (? IN NATURAL LANGUAGE MODE)", [req.body.name], function (err, results) {
         if (err) 
             console.log(err);
         res.json(results);
