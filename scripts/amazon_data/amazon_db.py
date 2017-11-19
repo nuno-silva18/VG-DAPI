@@ -14,8 +14,7 @@ def connectDatabase():
 
 def amaz_scrap(vg_name):
     global AMAZON
-    
-    # search on Amazon the top 10 search results for the video game name provided in the video games category
+    # search on Amazon the top 10 search results for the video game name
     try:
         products = AMAZON.search_n(10, Keywords=vg_name, SearchIndex='VideoGames')
     except:
@@ -23,12 +22,13 @@ def amaz_scrap(vg_name):
 
     for product in products:
         if product.product_group == 'Video Games':
-            # open a csv file with append, so old date will not be erased
+            vg_metac_list = [product.price_and_currency[0], product.detail_page_url, vg_name]
+            vg_metac_sql = "UPDATE `gameplatform` SET `amazon_price`= %s, `amazon_link` = %s WHERE (SELECT `id` FROM `game` WHERE `name` = %s) = `gameID`"
+            cur.execute(vg_metac_sql, vg_metac_list)
+            db.commit()
 
-            with open('amazon.csv', 'a') as csv_file:
-                writer = csv.writer(csv_file)
-                writer.writerow([product.title, product.price_and_currency, product.detail_page_url])
-                return
+    return
+
 
 # call the module directly for testing
 if __name__ == '__main__':
