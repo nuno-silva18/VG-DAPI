@@ -78,12 +78,12 @@ CREATE TABLE IF NOT EXISTS `game` (
   `dateEU` tinytext,
   `HLTB_Main` smallint,
   `HLTB_Complete` smallint,
-  `IMDB_score` float,
-  `IMDB_userscore` float,
   FULLTEXT (name, description),
   PRIMARY KEY (`id`),
   UNIQUE KEY (`name`)
 ) ENGINE=InnoDB;
+
+ALTER TABLE `game` CONVERT TO CHARACTER SET utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `gameplatform` (
   `metacritic_user` tinyint,
   `metacritic_number_reviews` smallint,
   `steamID` int(11),
-  `steam_score` tinyint,
+  `steam_score` tinytext,
   `amazon_price` float,
   `amazon_link` text,
   PRIMARY KEY (`id`),

@@ -1,14 +1,13 @@
-"""
-File responsable to get information about steam games
-"""
-#import the library used to query a website
-import urllib2
-
-#import the Beautiful soup functions to parse the data returned from the website
+import pymysql
+import urllib.request
 from bs4 import BeautifulSoup
-
-#import the request to get the appID
 import requests
+
+def connectDatabase():
+    """Create database connection"""
+    global db
+    db = pymysql.connect(host='localhost', user='root', password='',
+                         db='vg_dapi', cursorclass=pymysql.cursors.DictCursor,charset='utf8')
 
 def getappid(appid_games_list, name):
     """ Function responsable to get the App ID of a game, given a name"""
@@ -17,34 +16,41 @@ def getappid(appid_games_list, name):
             print(name + " App ID: " + str(i['appid']))
             return i['appid']
 
-def getgameinfo(urlsteam, appid):
+def getgameinfo(urlsteam, appid, vgnamesteam):
     
-    pageurl = urllib2.Request(urlsteam + str(appid))
+    pageurl = urllib.request.Request(urlsteam + str(appid))
     #Query the website and return the html to the variable 'page'
-    page = urllib2.urlopen(pageurl)
+    page = urllib.request.urlopen(pageurl)
     #Parse the html in the 'page' variable, and store it in Beautiful Soup format
     soup = BeautifulSoup(page, "lxml")
 
-    reviews = soup.findAll('span', class_='nonresponsive_hidden responsive_reviewdesc')
+    reviews = soup.find('span', class_='nonresponsive_hidden responsive_reviewdesc')
+ 
 
-    game_description = soup.find('div', class_='game_description_snippet')
-
-    game_price = soup.find('div', class_='game_purchase_price price')
-
-    #possibility to recomended games (NOT FINISHED)
-    games_recomended = soup.find_all('a', class_="small_cap")
-    print([reviews,game_description.string,game_price.string,games_recomended])
+    if reviews is None:
+        pass
+    else:
+        vgsteamscores_list = [appid, reviews.text, vgnamesteam]
+        vgsteamscores_sql = "UPDATE `gameplatform` SET `steamID` = %s, `steam_score` = %s WHERE (SELECT `id` FROM `game` WHERE `name` = %s) = `gameID`"
+        cur.execute(vgsteamscores_sql, vgsteamscores_list)
+        db.commit()
 
 if __name__ == '__main__':    
+    url = "http://store.steampowered.com/app/"
+    
     #request responsable to return a json object with all the steam games
     r = requests.get('https://api.steampowered.com/ISteamApps/GetAppList/v2/')
 
     #store appID and Names of the games into a List
     gameslist = r.json()['applist']['apps']
-    #get appID given the name of the Game
-    appiddota = getappid(gameslist, 'Dota 2')
 
-    #specify steam url
-    url = "http://store.steampowered.com/app/"
-    
-    getgameinfo(url, appiddota)
+    connectDatabase()
+    cur = db.cursor()
+    cur.execute("SELECT name FROM game")
+    vgnames_list = cur.fetchall()
+    for vgname in vgnames_list:
+        if getappid(gameslist, vgname['name']) is None:
+            pass
+        else:
+            appidgame = getappid(gameslist, vgname['name'])
+            getgameinfo(url, appidgame, vgname['name'])
