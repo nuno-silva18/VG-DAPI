@@ -138,7 +138,8 @@ CREATE TABLE IF NOT EXISTS `gamegenre` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `genreID` int(11) NOT NULL,
   `gameID` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE `gameGenreCombo` ('genreID','gameID')
 ) ENGINE=InnoDB;
 
 
