@@ -4,4 +4,6 @@ module.exports = function(app) {
       // todoList Routes
   app.route('/game/name')
     .post(controller.getGameByName)
+  app.route('/hltb/all')
+    .get(controller.getHLTBAll)
 };

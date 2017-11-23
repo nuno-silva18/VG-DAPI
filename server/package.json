@@ -17,6 +17,7 @@
     "nodemon": "^1.12.1"
   },
   "dependencies": {
+    "bottleneck": "^1.16.0",
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "google-trends-api": "^4.3.0"
