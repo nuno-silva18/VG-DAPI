@@ -21,11 +21,14 @@ def amaz_scrap(vg_name):
         return
 
     for product in products:
-        if product.product_group == 'Video Games':
-            vg_metac_list = [product.price_and_currency[0], product.detail_page_url, vg_name]
-            vg_metac_sql = "UPDATE `gameplatform` SET `amazon_price`= %s, `amazon_link` = %s WHERE (SELECT `id` FROM `game` WHERE `name` = %s) = `gameID`"
-            cur.execute(vg_metac_sql, vg_metac_list)
-            db.commit()
+        if product.product_group == 'Video Games' and product.price_and_currency[0] is not None:
+            if product.price_and_currency[0] < 90.0:
+                vg_metac_list = [product.price_and_currency[0], product.detail_page_url, vg_name]
+                vg_metac_sql = "UPDATE `gameplatform` SET `amazon_price`= %s, `amazon_link` = %s WHERE (SELECT `id` FROM `game` WHERE `name` = %s) = `gameID`"
+                cur.execute(vg_metac_sql, vg_metac_list)
+                db.commit()
+                print('Grabbed Amazon price and data for ' + vg_name)
+                break
 
     return
 
