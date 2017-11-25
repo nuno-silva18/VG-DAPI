@@ -27,6 +27,7 @@ def metac_scrap():
                     vg_metac_sql = "UPDATE `gameplatform` SET `metacritic`=%s, `metacritic_user` = %s, `metacritic_number_reviews` = %s WHERE (SELECT `id` FROM `game` WHERE `name` = %s) = `gameID`"
                     cur.execute(vg_metac_sql, vg_metac_list)
                     db.commit()
+                    print("Added description and Metacritic score and user score to " + row[11])
 
     return
 
