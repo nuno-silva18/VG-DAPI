@@ -79,6 +79,8 @@ CREATE TABLE IF NOT EXISTS `game` (
   `HLTB_Main` smallint,
   `HLTB_Complete` smallint,
   FULLTEXT (name, description),
+  FULLTEXT (name),
+  FULLTEXT (description),
   PRIMARY KEY (`id`),
   UNIQUE KEY (`name`)
 ) ENGINE=InnoDB;
